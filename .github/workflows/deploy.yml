@@ -1,1 +1,21 @@
 
+steps:
+  ...
+  - name: Unit Test
+    run: |
+      mkdir -p ~/.aws
+      touch ~/.aws/credentials
+
+      echo "[default]
+      aws_access_key_id = ${{ secrets.AWS_ACCESS_KEY_ID }}
+      aws_secret_access_key = ${{ secrets.AWS_SECRET_KEY_ID }}
+      region = ${AWS_DEFAULT_REGION}
+
+      [github]
+      role_arn = arn:aws:iam::{accountID}:role/{role}
+      source_profile = default" > ~/.aws/credentials 
+
+      npm test
+    env:
+      AWS_DEFAULT_REGION: us-east-1
+      CI: true
